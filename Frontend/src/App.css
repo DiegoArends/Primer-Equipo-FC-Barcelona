@@ -289,3 +289,93 @@ body {
   display: flex;
   top: -15px; 
 }
+
+
+/*responsive*/
+
+@media screen and (max-width: 576px) {
+  .overlay-datos {
+    flex-direction: column;
+    padding: 16px;
+  }
+
+  .titulo-position,
+  .primer-equipo {
+    font-size: 1.3rem;
+  }
+
+  .botones-navegacion {
+    width: 95%;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .botones-navegacion button {
+    flex: 1 1 10%;
+    font-size: 0.6rem;
+    padding: 10px 5px;
+    white-space: nowrap;
+  }
+
+  .botones-navegacion .director-tecnico {
+    flex: 1 1 100%;
+    text-align: center;
+  }
+  
+
+.presentado-por {
+  top: -30px; 
+  left: 72%; 
+}
+
+.presentado-texto {
+  font-size: 0.5rem;
+}
+
+.presentado-nombre {
+  font-size: 0.6rem;
+}
+
+
+.primer-equipo {
+  font-size: 1.2rem;
+  right: 38%;
+  top: -30px; 
+}
+.Tittle {
+  padding: 5px;
+  font-size: 1.0em;
+}
+
+.Tittle b {
+  font-size: 0.7em;
+
+}
+
+.contenedor-jugadores {
+  gap: 25px;
+  max-width: 490px;
+}
+
+  .overlay-datos {
+    flex-direction: row;
+    top: 80%;
+    left: -4%;
+    transform: translateY(-50%);
+  }
+
+  .dato-jugador {
+    width: 45%;
+    text-align: center;
+    margin-bottom: 8px;
+  }
+
+  .titulo-dato {
+    font-size: 0.85rem;
+  }
+
+  .valor-dato {
+    font-size: 1.05rem;
+  }
+}
