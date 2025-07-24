@@ -12,7 +12,7 @@ const players = [
   { name: 'Marc-André ter Stegen', position: 'Portero', number: 1, nationality: 'Alemania', birthdate: '1992-04-30', photo_url: '/photos/01-Ter_Stegen.webp' },
   { name: 'Iñaki Peña', position: 'Portero', number: 13, nationality: 'España', birthdate: '1999-03-02', photo_url: '/photos/00-Pena.webp' },
   { name: 'Wojciech Szczesny', position: 'Portero', number: 25, nationality: 'Polonia', birthdate: '1990-04-18', photo_url: '/photos/25-Szczesny.webp' },
-  { name: 'Joan García', position: 'Portero', number: null, nationality: 'España', birthdate: '2001-05-04', photo_url: '/photos/00-Joan_Garcia.webp' },
+  { name: 'Joan García', position: 'Portero', number: 34, nationality: 'España', birthdate: '2001-05-04', photo_url: '/photos/00-Joan_Garcia.webp' },
   { name: 'Pau Cubarsí', position: 'Defensa', number: 2, nationality: 'España', birthdate: '2007-01-22', photo_url: '/photos/02-Cubarsi.webp' },
   { name: 'Alejandro Balde', position: 'Defensa', number: 3, nationality: 'España', birthdate: '2003-10-18', photo_url: '/photos/03-Balde.webp' },
   { name: 'Ronald Araújo', position: 'Defensa', number: 4, nationality: 'Uruguay', birthdate: '1999-03-07', photo_url: '/photos/04-Araujo.webp' },
@@ -30,7 +30,7 @@ const players = [
   { name: 'Robert Lewandowski', position: 'Delantero', number: 9, nationality: 'Polonia', birthdate: '1988-08-21', photo_url: '/photos/09-Lewandowski.webp' },
   { name: 'Raphinha', position: 'Delantero', number: 11, nationality: 'Brasil', birthdate: '1996-12-14', photo_url: '/photos/11-Raphinha.webp' },
   { name: 'Pau Víctor', position: 'Delantero', number: 18, nationality: 'España', birthdate: '2001-11-26', photo_url: '/photos/18-Pau_Victor.webp' },
-  { name: 'Lamine Yamal', position: 'Delantero', number: 19, nationality: 'España', birthdate: '2007-07-13', photo_url: '/photos/19-Lamine.webp' }
+  { name: 'Lamine Yamal', position: 'Delantero', number: 19, nationality: 'España', birthdate: '2007-07-13', photo_url: '/photos/19-Lamine.webp' },
 ];
 
 players.forEach(player => {
