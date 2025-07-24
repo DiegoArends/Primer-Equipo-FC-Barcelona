@@ -14,7 +14,8 @@ function App() {
   };
 
   useEffect(() => {
-    axios.get('http://localhost:3001/players')
+    //axios.get('http://localhost:3001/players')
+    axios.get(`${process.env.REACT_APP_API_URL}/players`)
       .then(res => setPlayers(res.data))
       .catch(err => console.error(err));
   }, []);
