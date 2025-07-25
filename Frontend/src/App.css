@@ -356,7 +356,7 @@ padding: clamp(24px, 6vw, 50px) clamp(12px, 4vw, 24px);
   .dorsal {
     font-size: 6rem;
     bottom: 10%;
-    top: -6%;
+    top: -2%;
   }
   
 }
