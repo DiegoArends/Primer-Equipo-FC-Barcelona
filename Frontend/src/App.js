@@ -54,19 +54,22 @@ function App() {
       </div>
 
       <div className="contenedor-jugadores">
-        <div className="presentado-por">
-          <span className="presentado-texto">PRESENTADO POR</span>
-          <span className="presentado-nombre">DIEGO ARENDS</span>
+        <div className="bloque-identidad">
+          <div className="presentado-por">
+            <span className="presentado-texto">PRESENTADO POR</span>
+            <span className="presentado-nombre">DIEGO ARENDS</span>
+          </div>
+          <div className="primer-equipo">FC BARCELONA FIRST TEAM</div>
         </div>
 
-        <div className="primer-equipo">FC BARCELONA FIRST TEAM</div>
-
-        <div className="botones-navegacion">
-          <button onClick={() => scrollToSection('portero')}>PORTERO</button>
-          <button onClick={() => scrollToSection('defensa')}>DEFENSA</button>
-          <button onClick={() => scrollToSection('medio')}>MEDIOCAMPISTAS</button>
-          <button onClick={() => scrollToSection('delantero')}>DELANTEROS</button>
-          <button onClick={() => scrollToSection('director tecnico')}>DIRECTOR TECNICO</button>
+        <div className="scroll-wrapper">
+          <div className="botones-navegacion">
+            <button onClick={() => scrollToSection('portero')}>PORTERO</button>
+            <button onClick={() => scrollToSection('defensa')}>DEFENSA</button>
+            <button onClick={() => scrollToSection('medio')}>MEDIOCAMPISTAS</button>
+            <button onClick={() => scrollToSection('delantero')}>DELANTEROS</button>
+            <button onClick={() => scrollToSection('director tecnico')}>DIRECTOR TECNICO</button>
+          </div>
         </div>
 
         {posiciones.map(pos => (

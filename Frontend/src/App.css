@@ -1,32 +1,38 @@
-.Tittle h1 {
-  position: relative;
-  z-index: 1;
-}
 .Tittle {
   position: relative;
-  padding: 15px;
+  padding: 3vw 4vw;
+  /* adaptable al ancho de pantalla */
   color: #ffc800;
   text-align: center;
   font-family: 'Segoe UI', sans-serif;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   overflow: hidden;
-  font-size: 1.5em;
+  font-size: clamp(1.2em, 2.5vw, 1.5em);
+  /* escala elegante entre tamaños */
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.568);
+}
+
+.Tittle h1 {
+  position: relative;
+  z-index: 1;
+  font-size: clamp(1.5rem, 4vw, 2.2rem);
+  /* para titular */
 }
 
 .Tittle b {
   color: #ffffffd2;
   z-index: 1;
   position: relative;
-  font-size: 0.6em;
-
+  font-size: clamp(0.6em, 2vw, 0.85em);
+  /* más limpio en móviles */
 }
+
 
 .titulo-position {
   width: 100%;
-  max-width: 1500px;
+  max-width: 93.75rem;
   margin: 0px auto 16px auto;
-  font-size: 2rem;
+  font-size: clamp(1.6em, 2vw, 0.85em);
   font-weight: bold;
   color: #000000;
   text-align: center;
@@ -39,8 +45,10 @@
   justify-content: center;
   align-items: center;
   gap: 12px;
-  margin: 10px auto;
+  margin: 50px auto;
   width: 100%;
+flex-wrap: nowrap; /* evita que se rompa en varias filas */
+  min-width: max-content; /* permite que el scroll funcione bien */
 }
 
 
@@ -61,30 +69,42 @@
   background-color: #5e1533;
   color: #ffffff;
 }
+.scroll-wrapper {
+  width: 100%;
+  overflow-x: auto; /* habilita el scroll horizontal */
+  padding: 0 12px;
+}
+.scroll-wrapper::-webkit-scrollbar {
+  height: 6px;
+}
+
+.scroll-wrapper::-webkit-scrollbar-thumb {
+  background: #b4b4b4;
+}
 
 .contenedor-jugadores {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 32px;
+gap: clamp(16px, 4vw, 32px);
   background-color: #ece8c6;
-  max-width: 1500px;
+  max-width: 93.75rem;
   margin-left: auto;
   margin-right: auto;
-  padding: 50px 24px;
+padding: clamp(24px, 6vw, 50px) clamp(12px, 4vw, 24px);
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.10);
-  border-radius: 2px;
+  border-radius: 5px;
   min-height: 100px;
+  position: relative;
 }
-
 
 
 .carta-jugador {
   position: relative;
   width: 407px;
   height: 400px;
-  border-radius: 2px;
+  border-radius: 5px;
   overflow: hidden;
   box-shadow: 0 6px 24px rgba(0, 0, 0, 0.13);
   margin-bottom: 20px;
@@ -188,7 +208,7 @@
   display: flex;
   flex-direction: column;
   margin-bottom: 12px;
-   text-align: center;
+  text-align: center;
 }
 
 .titulo-dato {
@@ -224,11 +244,18 @@
 
 
 .presentado-por {
-  position: relative;
-  top: -15px; 
- left: 60%; 
+  position: absolute;
+  top: 16px;
+  right: 24px;
+  font-size: 0.85rem;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-weight: bold;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
 }
 
 
@@ -239,6 +266,7 @@
   letter-spacing: 1px;
   color: #797770;
   margin-bottom: 4px;
+
 }
 
 .presentado-nombre {
@@ -255,99 +283,80 @@
   font-weight: bold;
   color: #000000;
   text-shadow: 0 2px 6px rgba(238, 238, 238, 0.349);
-  right: 40%;
-  position: relative;
+  top: 16px;
+  /* distancia desde el borde superior */
+  left: 24px;
+  /* distancia desde el borde derecho */
+  position: absolute;
+  padding: 6px 10px;
   display: flex;
-  top: -15px; 
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  z-index: 4;
 }
 
 
 /*responsive*/
 
-@media screen and (max-width: 576px) {
-  .overlay-datos {
-    flex-direction: column;
-    padding: 16px;
+/* 📱 Responsive adicional */
+@media screen and (max-width: 780px) {
+  .primer-equipo {
+    position: absolute;
+    top: 16px;
+    left: 24px;
+    font-size: 0.80rem;
+    padding: 6px 10px;
+    border-radius: 4px;
   }
 
-  .titulo-position,
-  .primer-equipo {
+  .presentado-por {
+    position: absolute;
+    top: 16px;
+    right: 24px;
+    font-size: 0.85rem;
+    padding: 6px 10px;
+    border-radius: 4px;
+  }
+
+  .Tittle {
+    padding: 16px 12px;
+  }
+
+  .Tittle h1 {
     font-size: 1.3rem;
   }
 
-  .botones-navegacion {
-    width: 95%;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 10px;
-  }
-
-  .botones-navegacion button {
-    flex: 1 1 10%;
+  .Tittle b {
     font-size: 0.6rem;
-    padding: 10px 5px;
-    white-space: nowrap;
+  }
+  .scroll-wrapper {
+    overflow-x: auto;
   }
 
-  .botones-navegacion .director-tecnico {
-    flex: 1 1 100%;
-    text-align: center;
+  .botones-navegacion {
+    justify-content: flex-start; /* para alinearlos al principio y permitir scroll */
+  }
+
+  .contenedor-jugadores {
+    max-width: 20rem;
+  }
+
+  .carta-jugador {
+    width: 100%;
+    max-width: 90vw;
+  }
+
+  .foto-director {
+    width: 180%;
+    height: auto;
+    right: 40.5%;
+  }
+
+  .dorsal {
+    font-size: 6rem;
+    bottom: 10%;
+    top: -7%;
   }
   
-
-.presentado-por {
-  top: -30px; 
-  left: 72%; 
-}
-
-.presentado-texto {
-  font-size: 0.5rem;
-}
-
-.presentado-nombre {
-  font-size: 0.6rem;
-}
-
-
-.primer-equipo {
-  font-size: 1.2rem;
-  right: 38%;
-  top: -30px; 
-}
-.Tittle {
-  padding: 5px;
-  font-size: 1.0em;
-}
-
-.Tittle b {
-  font-size: 0.7em;
-
-}
-
-.contenedor-jugadores {
-  gap: 25px;
-  max-width: 490px;
-}
-
-  .overlay-datos {
-    flex-direction: row;
-    top: 80%;
-    left: -4%;
-    transform: translateY(-50%);
-  }
-
-  .dato-jugador {
-    width: 45%;
-    text-align: center;
-    margin-bottom: 8px;
-  }
-
-  .titulo-dato {
-    font-size: 0.85rem;
-  }
-
-  .valor-dato {
-    font-size: 1.05rem;
-  }
-
 }
