@@ -3,10 +3,17 @@ import axios from 'axios';
 import fondoVidrio from './assets/fondo-con-textura-de-vidrio-patron.jpg';
 import campNou from './assets/El_Camp_Nou_en_un_partido_de_la_Uefa_Champions_League.webp';
 import './App.css';
+import nike from './assets/Logo_NIKE.svg.png';
+import spotify from './assets/spotify-logo (1).svg';
+import instagram from './assets/instagram.png'
+import facebook from './assets/facebook.png'
+import x from './assets/twitter..avif'
+import youtube from './assets/youtube.png'
+
 
 function App() {
   const [players, setPlayers] = useState([]);
-  const posiciones = ['Portero', 'Defensa', 'Medio', 'Delantero'];
+  const posiciones = ['Portero', 'Defensa', 'Mediocampista', 'Delantero'];
 
   const scrollToSection = (id) => {
     const element = document.getElementById(id);
@@ -17,6 +24,7 @@ function App() {
 
   useEffect(() => {
     axios.get(`${process.env.REACT_APP_API_URL}/players`)
+    //.get('http://localhost:3001/players')
       .then(res => setPlayers(res.data))
       .catch(err => console.error(err));
   }, []);
@@ -66,7 +74,7 @@ function App() {
           <div className="botones-navegacion">
             <button onClick={() => scrollToSection('portero')}>PORTERO</button>
             <button onClick={() => scrollToSection('defensa')}>DEFENSA</button>
-            <button onClick={() => scrollToSection('medio')}>MEDIOCAMPISTAS</button>
+            <button onClick={() => scrollToSection('mediocampista')}>MEDIOCAMPISTAS</button>
             <button onClick={() => scrollToSection('delantero')}>DELANTEROS</button>
             <button onClick={() => scrollToSection('director tecnico')}>DIRECTOR TECNICO</button>
           </div>
@@ -127,6 +135,47 @@ function App() {
             </div>
           ))}
       </div>
+      <section className="sponsors-section">
+      <h2>SPONSORS OFICIALES</h2>
+<div className="sponsors-logos">
+  <a href="https://www.nike.com" target="_blank" rel="noopener noreferrer">
+    <img src={nike} alt="Nike" />
+  </a>
+  <a href="https://www.spotify.com" target="_blank" rel="noopener noreferrer">
+    <img src={spotify} alt="Spotify" />
+  </a>
+</div>
+<section className="redes-section">
+  <h2>SIGUE AL BARÇA EN REDES SOCIALES</h2>
+  <div className="redes-logos">
+    <a href="https://www.instagram.com/fcbarcelona" target="_blank" rel="noopener noreferrer">
+      <img src= {instagram} alt="Instagram" />
+    </a>
+    <a href="https://www.twitter.com/fcbarcelona" target="_blank" rel="noopener noreferrer">
+      <img src={x} alt="Twitter/X" />
+    </a>
+    <a href="https://www.facebook.com/fcbarcelona" target="_blank" rel="noopener noreferrer">
+      <img src= {facebook}alt="Facebook" />
+    </a>
+    <a href="https://www.youtube.com/fcbarcelona" target="_blank" rel="noopener noreferrer">
+      <img src= {youtube} alt="YouTube" />
+    </a>
+  </div>
+</section>
+</section>
+      <footer
+  style={{
+    backgroundColor: '#0a0a0a',
+    color: '#fff',
+    textAlign: 'center',
+    padding: '20px 10px',
+    marginTop: '50px',
+    fontSize: '0.9rem'
+  }}
+>
+<p>&copy; {new Date().getFullYear()} FC Barcelona - Proyecto desarrollado por Diego Arends</p>
+<p>Inspirado en la página oficial del primer equipo</p>
+</footer>
     </div>
   );
 }
