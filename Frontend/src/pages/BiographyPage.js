@@ -15,7 +15,8 @@ function BiographyPage() {
   const [player, setPlayer] = useState(null);
 
   useEffect(() => {
-    axios.get(`http://localhost:3001/players_biography/${id}`)
+    axios.get(`${process.env.REACT_APP_API_URL}/players_biography/${id}`)
+    //.get(`http://localhost:3001/players_biography/${id}`)
       .then(res => setPlayer(res.data))
       .catch(err => console.error(err));
   }, [id]);
