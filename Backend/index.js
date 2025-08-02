@@ -90,3 +90,16 @@ app.listen(PORT, () => {
 });
 
 
+// Obtener la biografía de un jugador por ID
+app.get('/players_biography/:id', (req, res) => {
+  const { id } = req.params;
+  db.get('SELECT * FROM players_biography WHERE id = ?', [id], (err, row) => {
+    if (err) {
+      res.status(500).json({ error: err.message });
+    } else if (!row) {
+      res.status(404).json({ error: 'Biografía no encontrada' });
+    } else {
+      res.json(row);
+    }
+  });
+});
