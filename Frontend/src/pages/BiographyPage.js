@@ -47,7 +47,6 @@ function BiographyPage() {
               </li>
               <li className="names">
                 <li><b>Goles</b></li>
-                <ul className="stats"></ul>
                 <li className='numbers'>{player.goals}</li>
                 <li>Temporada 25/26</li>
                 <li className='sub-numbers'>{player.goals_now}</li>

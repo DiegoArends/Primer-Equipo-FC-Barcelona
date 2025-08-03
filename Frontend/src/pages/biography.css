@@ -219,12 +219,11 @@ display: grid
 
   .datos-jugador_bio {
     top: 74%;
-    background-color: #002944;
     z-index: 1;
     left: 0;
     right: 0;
     width: 100%;
-    height: 100%;
+    height: 20%;
   }
 
   .datos-jugador_bio2 {
