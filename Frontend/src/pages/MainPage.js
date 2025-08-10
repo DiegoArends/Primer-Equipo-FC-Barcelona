@@ -33,8 +33,8 @@ function MainPage() {
   }, []);
 
   useEffect(() => {
-    axios//.get(`${process.env.REACT_APP_API_URL}/players`)
-    .get('http://localhost:3001/players')
+    axios.get(`${process.env.REACT_APP_API_URL}/players`)
+    //.get('http://localhost:3001/players')
       .then(res => setPlayers(res.data))
       .catch(err => console.error(err));
   }, []);
