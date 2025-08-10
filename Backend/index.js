@@ -1,9 +1,13 @@
 const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
 const cors = require('cors');
+const compression = require('compression');
 
 const app = express();
 const PORT = 3001;
+
+// Middleware de compresión gzip para reducir tamaño de respuestas
+app.use(compression());
 
 // Middleware para leer JSON y permitir CORS
 app.use(express.json());
@@ -18,19 +22,58 @@ const db = new sqlite3.Database('./barcelona.db', (err) => {
   }
 });
 
+// Cache simple en memoria para jugadores
+let playersCache = null;
+let cacheTimestamp = null;
+const CACHE_DURATION = 5 * 60 * 1000; // 5 minutos
+
+// Función para obtener jugadores con caché
+const getPlayersWithCache = () => {
+  return new Promise((resolve, reject) => {
+    // Si hay caché válido, usarlo
+    if (playersCache && cacheTimestamp && (Date.now() - cacheTimestamp) < CACHE_DURATION) {
+      return resolve(playersCache);
+    }
+
+    // Si no hay caché válido, consultar la base de datos
+    db.all('SELECT * FROM players ORDER BY position_2, name', [], (err, rows) => {
+      if (err) {
+        reject(err);
+      } else {
+        // Actualizar caché
+        playersCache = rows;
+        cacheTimestamp = Date.now();
+        resolve(rows);
+      }
+    });
+  });
+};
+
 // Endpoint de prueba
 app.get('/', (req, res) => {
   res.send('¡API de Barcelona funcionando!');
 });
 
-// Obtener todos los jugadores (ahora players)
-app.get('/players', (req, res) => {
-  db.all('SELECT * FROM players', [], (err, rows) => {
-    if (err) {
-      res.status(500).json({ error: err.message });
-    } else {
-      res.json(rows);
-    }
+// Obtener todos los jugadores (con caché)
+app.get('/players', async (req, res) => {
+  try {
+    const players = await getPlayersWithCache();
+    // Agregar header de cache para el navegador
+    res.set('Cache-Control', 'public, max-age=300'); // 5 minutos
+    res.json(players);
+  } catch (err) {
+    console.error('Error al obtener jugadores:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Endpoint para verificar estado de la API y caché
+app.get('/health', (req, res) => {
+  res.json({ 
+    status: 'OK', 
+    timestamp: new Date().toISOString(),
+    cacheStatus: playersCache ? 'active' : 'inactive',
+    cacheAge: cacheTimestamp ? Math.floor((Date.now() - cacheTimestamp) / 1000) + 's' : 'N/A'
   });
 });
 
@@ -47,6 +90,9 @@ app.post('/players', (req, res) => {
     if (err) {
       res.status(500).json({ error: err.message });
     } else {
+      // Invalidar caché después de insertar
+      playersCache = null;
+      cacheTimestamp = null;
       res.json({ id: this.lastID, ...req.body });
     }
   });
@@ -64,6 +110,9 @@ app.put('/players/:id', (req, res) => {
     } else if (this.changes === 0) {
       res.status(404).json({ error: 'Jugador no encontrado' });
     } else {
+      // Invalidar caché después de actualizar
+      playersCache = null;
+      cacheTimestamp = null;
       res.json({ id, name, position, number, nationality, birthdate, photo_url });
     }
   });
@@ -79,16 +128,13 @@ app.delete('/players/:id', (req, res) => {
     } else if (this.changes === 0) {
       res.status(404).json({ error: 'Jugador no encontrado' });
     } else {
+      // Invalidar caché después de eliminar
+      playersCache = null;
+      cacheTimestamp = null;
       res.json({ message: 'Jugador eliminado correctamente' });
     }
   });
 });
-
-// Iniciar el servidor
-app.listen(PORT, () => {
-  console.log(`Servidor escuchando en http://localhost:${PORT}`);
-});
-
 
 // Obtener la biografía de un jugador por ID
 app.get('/players_biography/:id', (req, res) => {
@@ -102,4 +148,9 @@ app.get('/players_biography/:id', (req, res) => {
       res.json(row);
     }
   });
+});
+
+// Iniciar el servidor
+app.listen(PORT, () => {
+  console.log(`Servidor escuchando en http://localhost:${PORT}`);
 });

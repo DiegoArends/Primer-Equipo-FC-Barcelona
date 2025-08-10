@@ -15,83 +15,97 @@ function BiographyPage() {
   const [player, setPlayer] = useState(null);
 
   useEffect(() => {
-    axios.get(`${process.env.REACT_APP_API_URL}/players_biography/${id}`)
-    //.get(`http://localhost:3001/players_biography/${id}`)
+    const baseUrl = process.env.REACT_APP_API_URL || 'http://localhost:3001';
+    axios
+      .get(`${baseUrl}/players_biography/${id}`)
       .then(res => setPlayer(res.data))
       .catch(err => console.error(err));
   }, [id]);
 
   if (!player) return <div className="biografia-carta">Cargando biografía...</div>;
 
+  const isCoach = (player.position || '').toLowerCase().includes('tecnico') ||
+                  (player.position || '').toLowerCase().includes('técnico') ||
+                  /hansi\s*flick/i.test(player.name || '');
+
   return (
     <>
       <header className="header-bio">
         <div className="header-content">
-          <h1>FC Barcelona</h1>
+          <h1>
+            <Link to="/" className="brand-link">FC Barcelona</Link>
+          </h1>
           <nav>
             <Link to="/" className="nav-link">Jugadores</Link>
           </nav>
         </div>
       </header>
 
-      <div className="biografia-carta">
+      <div className={`biografia-carta ${isCoach ? 'sin-stats1' : ''}`}>
         <h2 className="nombre-jugador_fondo">{player.short_name}</h2>
         
-          <div className="datos-jugador_bio">
-            <ul className="stats">
-              <li className="names">
-                <li><b>Partidos</b></li>
-                <li className='numbers'>{player.matches_played}</li>
-                <li>Temporada 25/26</li>
-                <li className='sub-numbers'>{player.matches_played_now}</li>
-              </li>
-              <li className="names">
-                <li><b>Goles</b></li>
-                <li className='numbers'>{player.goals}</li>
-                <li>Temporada 25/26</li>
-                <li className='sub-numbers'>{player.goals_now}</li>
-              </li>
-              <li className="names">
-                <li><b>Asistencias</b></li>
-                <li className='numbers'>{player.assists}</li>
-                <li>Temporada 25/26</li>
-                <li className='sub-numbers'>{player.assists_now}</li>  
-              </li>
-            </ul>
-          </div>
+          {!isCoach && (
+            <div className="datos-jugador_bio">
+              <ul className="stats">
+                <li className="names">
+                  <div><b>Partidos</b></div>
+                  <div className='numbers'>{player.matches_played}</div>
+                  <div>Temporada 25/26</div>
+                  <div className='sub-numbers'>{player.matches_played_now}</div>
+                </li>
+                <li className="names">
+                  <div><b>Goles</b></div>
+                  <div className='numbers'>{player.goals}</div>
+                  <div>Temporada 25/26</div>
+                  <div className='sub-numbers'>{player.goals_now}</div>
+                </li>
+                <li className="names">
+                  <div><b>Asistencias</b></div>
+                  <div className='numbers'>{player.assists}</div>
+                  <div>Temporada 25/26</div>
+                  <div className='sub-numbers'>{player.assists_now}</div>
+                </li>
+              </ul>
+            </div>
+          )}
 
           <div className="datos-jugador_bio2">
           <h2 className="nombre">{player.name}</h2>
             <ul className="stats-2">
               <li className="names">
-                <li><b>Nacimiento</b></li>
-                <li className='sub-numbers'>{player.birth_date}</li>
+                <div><b>Nacimiento</b></div>
+                <div className='sub-numbers'>{player.birth_date}</div>
+              </li>
+              {!isCoach && (
+                <li className="names">
+                  <div>Peso</div>
+                  <div className='sub-numbers'>{player.weight_kg}kg</div>
+                </li>
+              )}
+              <li className="names">
+                <div><b>Altura</b></div>
+                <div className='sub-numbers'>{player.height_m}m</div>
               </li>
               <li className="names">
-                <li>Peso</li>
-                <li className='sub-numbers'>{player.weight_kg}kg</li>
-              </li>
-              <li className="names">
-                <li><b>Altura</b></li>
-                <li className='sub-numbers'>{player.height_m}m</li>
-              </li>
-              <li className="names">
-              <li><b>Posición</b></li>
-                <li className='sub-numbers'>{player.position}</li>
+                <div><b>Posición</b></div>
+                <div className='sub-numbers'>{player.position}</div>
               </li>
             </ul>
           </div>
-          <img
-            src={player.photo_url}
-            alt={player.name}
-            className="foto-jugador_bio"
-          />
+          <div className="foto-wrapper">
+            <img
+              src={player.photo_url}
+              alt={player.name}
+              className="foto-jugador_bio"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
         </div>
 
         <div className='biografia-container'>
-        <h2 className="nombre">{player.name}</h2>
-        <h2 className='biografia'>{player.biography}</h2>
-      
+          <h2 className="nombre">{player.name}</h2>
+          <p className='biografia'>{player.biography}</p>
         </div>
 
       <section className="sponsors-section">

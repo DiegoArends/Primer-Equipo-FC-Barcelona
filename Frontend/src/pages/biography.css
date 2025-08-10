@@ -1,6 +1,7 @@
 body {
   background-color: #002944;
-  background-image: radial-gradient(circle, rgba(0, 0, 0, 0.7) 0%, rgba(30, 131, 253, 0.863) 100%)
+  background-image:
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.7), rgba(30, 131, 253, 0.6)),
     url('../assets/fondo-con-textura-de-vidrio-patron.jpg');
   background-blend-mode: multiply;
   background-size: cover;
@@ -11,15 +12,18 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  overflow-x: hidden; /* evita scroll lateral */
 }
+
+html { overflow-x: hidden; }
 
 /* Estilos para el header */
 .header-bio {
-  background-color: radial-gradient(circle, rgba(56, 4, 4, 0.7) 0%, rgba(30, 131, 253, 0.863) 100%);
-  /* Color azul del Barça */
-  color: white;
+  background: linear-gradient(90deg, #004d98, #a50044);
+  color: #fff;
   padding: 1rem 2rem;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
+  position: sticky;
   top: 0;
   z-index: 100;
 }
@@ -50,22 +54,73 @@ body {
   /* Color granate del Barça */
 }
 
+.brand-link {
+  color: #fff;
+  text-decoration: none;
+}
+
+.brand-link:hover {
+  color: #ececec;
+}
+
 .biografia-carta {
-  max-width: 700px;
-  padding: 20% 50%;
-  background: linear-gradient(#0063a5, rgba(0, 0, 0, 0));
+  width: min(1200px, 92vw);
+  margin: 24px auto;
+  padding: clamp(16px, 3vw, 24px);
+  background: linear-gradient(180deg, rgba(0, 77, 152, 0.92), rgba(0, 77, 152, 0.55));
   color: #ffffff;
-  
   font-family: 'Segoe UI', sans-serif;
-  animation: fadeIn 0.6s ease-in;
-  border-radius: 5px;
+  border-radius: 10px;
   position: relative;
   overflow: hidden;
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  grid-template-areas:
+    'stats1 photo'
+    'stats2 photo';
+  gap: clamp(16px, 3vw, 28px);
+  align-items: end;
+}
+
+/* Fondo dinámico: halos y brillo suave en movimiento */
+.biografia-carta::before {
+  content: '';
+  position: absolute;
+  inset: -30% -10% -20% -10%;
+  background:
+    radial-gradient(60% 80% at 20% 25%, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0) 60%),
+    radial-gradient(70% 90% at 85% 80%, rgba(0, 0, 0, 0.28), rgba(0, 0, 0, 0) 60%);
+  mix-blend-mode: overlay;
+  pointer-events: none;
+  z-index: 0;
+  animation: floatGlow 14s ease-in-out infinite alternate;
+}
+
+.biografia-carta::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, transparent 0%, rgba(255, 255, 255, 0.08) 14%, transparent 28%);
+  background-size: 220% 100%;
+  mix-blend-mode: soft-light;
+  pointer-events: none;
+  z-index: 0;
+  animation: sheen 11s linear infinite;
+}
+
+@keyframes floatGlow {
+  0% { transform: translate3d(-1.5%, -1.5%, 0) scale(1); }
+  100% { transform: translate3d(1.5%, 1.5%, 0) scale(1); }
+}
+
+@keyframes sheen {
+  0% { background-position: -220% 0; }
+  100% { background-position: 220% 0; }
 }
 
 .nombre {
   font-weight: bold;
-  font-size: 1.8rem;
+  font-size: clamp(1.2rem, 2.2vw, 1.8rem);
   background: linear-gradient(to right, #cac6c1, #e4dcdf);
   -webkit-background-clip: text;
   background-clip: text;
@@ -75,71 +130,85 @@ body {
 
 .nombre-jugador_fondo {
   position: absolute;
-  font-size: 22vw;
+  left: 50%;
+  top: 8%;
+  transform: translate(-50%, 0);
+  font-size: clamp(64px, 18vw, 280px);
   font-weight: 900;
-  color: rgba(245, 243, 243, 0.267);
+  color: rgba(245, 243, 243, 0.22);
   text-transform: uppercase;
   white-space: nowrap;
-  /* Centrado absoluto */
-  top: 0%;
-  transform: translate(-50%, -50%);
-  /* Ajusta el punto de referencia */
   z-index: 0;
   pointer-events: none;
   user-select: none;
   letter-spacing: 10px;
-  line-height: 0.6;
+  line-height: 0.7;
   font-style: italic;
-  mask-image: linear-gradient(to bottom,
-      rgba(0, 0, 0, 1) 0%,
-      rgba(0, 0, 0, 0) 100%);
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 100%);
   width: 100%;
-  /* Asegura que no se desborde */
   text-align: center;
-  /* Centra el texto horizontalmente */
 }
 
 .datos-jugador_bio {
-  position: absolute;
-  top: 2%;
-  left: 5%;
+  grid-area: stats1;
+  position: relative;
+  z-index: 1;
 }
 
 .datos-jugador_bio2 {
-  position: absolute;
-  bottom: 10%;
-  left: 5%;
+  grid-area: stats2;
+  position: relative;
+  z-index: 1;
 }
 
+.foto-wrapper {
+  grid-area: photo;
+  position: relative;
+  display: grid;
+  place-items: end center;
+  width: max-content; /* para que el borde coincida con el ancho de la imagen */
+  justify-self: center;
+  align-self: end;
+  padding-bottom: 0;
+  line-height: 0; /* elimina espacio por línea base */
+  border-bottom: 3px solid rgba(145, 145, 145, 0.096);
+  border-radius: 2px;
+}
+
+/* se elimina sombra elíptica para usar solo un borde inferior */
+
 .foto-jugador_bio {
-  max-width: 100%;
-  height: 100%;
+  display: block; /* evita espacio inferior por inline-block */
+  width: min(100%, 580px);
+  max-height: min(65vh, 640px);
+  height: auto;
+  object-fit: contain;
+  object-position: center bottom;
   border-radius: 8px;
-  flex-shrink: 0;
-  position: absolute;
-  right: 10%;
-  bottom: 0;
+  justify-self: center;
+  align-self: end;
+  /* sin sombra para evitar efecto flotante */
 }
 
 .stats {
-  padding: 0;
-  display: flex;
-  gap: 1rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: clamp(8px, 2vw, 16px);
   text-align: center;
   margin: 0;
   padding: 0;
-  list-style-type: none;
+  list-style: none;
 }
 
 
 .stats-2 {
-  padding: 0;
-  display: flex;
-  gap: 1rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: clamp(8px, 2vw, 16px);
   text-align: center;
   margin: 0;
   padding: 0;
-  list-style-type: none;
+  list-style: none;
 }
 
 .names {
@@ -147,22 +216,27 @@ body {
   color: #ffffff;
   font-weight: bold;
   margin: 0;
-  padding: 0;
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+}
 
+.names > li {
+  list-style: none;
 }
 
 .numbers {
-  font-size: 6vmax;
+  font-size: clamp(28px, 6vmax, 64px);
   color: #ffc422;
   font-weight: bold;
-  margin-bottom: -10px;
-  margin-top: -20px;
-  padding: 0;
+  margin: 0;
+  line-height: 1;
   text-shadow: 2px 2px 4px rgba(31, 29, 29, 0.5);
 }
 
 .sub-numbers {
-  font-size: 2vmax;
+  font-size: clamp(14px, 2.2vmax, 22px);
   color: #ffc422;
   font-weight: bold;
   padding: 0;
@@ -173,122 +247,71 @@ body {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-gap: clamp(1.0rem, 1vw, 1.0rem);
-background-color: #0a0909e8;
-color: #cac6c1;
+  gap: clamp(1rem, 1vw, 1rem);
+  background-color: #0a0909e8;
+  color: #cac6c1;
   max-width: 93.75rem;
   margin-left: auto;
   margin-right: auto;
-padding: clamp(24px, 6vw, 50px) clamp(12px, 4vw, 24px);
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.10);
+  padding: clamp(24px, 6vw, 50px) clamp(12px, 4vw, 24px);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
   border-radius: 6px;
   min-height: 100px;
   position: relative;
+  text-align: left;
+  overflow-x: hidden; /* contén contenidos internos */
 }
 
-.biografia{
-text-align: center;
-display: grid
+/* nombre centrado arriba de la descripción en la sección de biografía */
+.biografia-container .nombre {
+  width: 100%;
+  text-align: center;
+  margin: 0 0 8px 0;
+  display: block;
 }
 
-/* Media Query para móviles (hasta 768px) */
-@media screen and (max-width: 768px) {
+.biografia {
+  text-align: center;
+  display: block;
+  font-weight: 500;
+  font-size: clamp(1rem, 2.2vw, 1.15rem);
+  line-height: 1.7;
+  max-width: 65ch;
+  margin: 0 auto;
+  white-space: pre-line;
+}
+
+/* Responsive */
+@media screen and (max-width: 1024px) {
   .biografia-carta {
-    max-width: 900px;
-    padding: 60% 50%;
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      'photo'
+      'stats1'
+      'stats2';
+    align-items: start;
   }
 
   .foto-jugador_bio {
-    max-width: 100%;
-    height: 70%;
-    right: -10%;
-    bottom: 26%;
-    border-radius: 0px;
-
+    max-height: min(52vh, 520px);
   }
 
   .nombre-jugador_fondo {
-    position: absolute;
-    font-size: 10vw;
-    font-weight: 900;
-    top: 60%;
-    transform: translate(-50%, -50%);
-    color: rgba(255, 255, 255, 0.897);
-    left: 40%;
+    top: 2%;
+    font-size: clamp(52px, 20vw, 320px);
   }
+}
 
-  .datos-jugador_bio {
-    top: 74%;
-    z-index: 1;
-    left: 0;
-    right: 0;
-    width: 100%;
-    height: 20%;
+@media screen and (max-width: 600px) {
+  .nombre {
+    font-size: clamp(1rem, 5vw, 1.3rem);
   }
-
-  .datos-jugador_bio2 {
-    position: absolute;
-    top: 0%;
-    left: 0%;
-  }
-
-
-
-  .names {
-    font-size: 0.8rem;
-    color: #ffffff;
-    font-weight: bold;
-    margin: 0;
-    padding: 0;
-
-  }
-  .stats {
-    text-align: center;
-    width: 100%;
-    border-radius: 10px;
-    margin-left: 0px;
-    margin-right: 0px;
-    gap: 30%
-  }
-
 
   .numbers {
-    font-size: 4vmax;
-    color: #ffc422;
-    font-weight: bold;
-    margin-bottom: 0px;
-    margin-top: 0px;
-    padding: 0;
-    text-shadow: 2px 2px 4px rgba(31, 29, 29, 0.5);
+    font-size: clamp(24px, 9vw, 44px);
   }
 
   .sub-numbers {
-    font-size: 2vmax;
-    color: #ffc422;
-    font-weight: bold;
-    padding: 0;
-    text-shadow: 2px 2px 4px rgba(31, 29, 29, 0.5);
-  }
-  .stats-2 {
-    padding: 0;
-    display: flex;
-    gap: 0.5rem;
-    text-align: left;
-    flex-direction: column;
-    list-style-type: none;
-    margin-top: 10px;
-  }
-
-  .biografia{
-  text-align: center;
-  display: grid;
-  font-size: 1rem;
-  }
-
-}
-
-@media screen and (max-width: 500px) { 
-  .stats {
-    gap: 20%
+    font-size: clamp(12px, 4vw, 18px);
   }
 }

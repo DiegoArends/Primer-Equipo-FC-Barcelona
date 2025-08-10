@@ -5,13 +5,14 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
-"postinstall": "npm rebuild sqlite3 --build-from-source"
+    "postinstall": "npm rebuild sqlite3 --build-from-source"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "compression": "^1.8.1",
     "cors": "^2.8.5",
     "express": "^5.1.0",
     "sqlite3": "^5.1.7"

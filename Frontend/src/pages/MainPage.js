@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import fondoVidrio from '../assets/fondo-con-textura-de-vidrio-patron.jpg';
@@ -15,16 +15,26 @@ function MainPage() {
   const [players, setPlayers] = useState([]);
   const posiciones = ['Portero', 'Defensa', 'Mediocampista', 'Delantero'];
 
-  const scrollToSection = (id) => {
+  // Memoizar los jugadores filtrados por posición para evitar recálculos
+  const playersByPosition = useMemo(() => {
+    const result = {};
+    posiciones.forEach(pos => {
+      result[pos] = players.filter(player => player.position_2 === pos);
+    });
+    result['DIRECTOR TECNICO'] = players.filter(player => player.position_2 === 'DIRECTOR TECNICO');
+    return result;
+  }, [players]);
+
+  const scrollToSection = useCallback((id) => {
     const element = document.getElementById(id);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
     }
-  };
+  }, []);
 
   useEffect(() => {
-    axios.get(`${process.env.REACT_APP_API_URL}/players`)
-    //.get('http://localhost:3001/players')
+    axios//.get(`${process.env.REACT_APP_API_URL}/players`)
+    .get('http://localhost:3001/players')
       .then(res => setPlayers(res.data))
       .catch(err => console.error(err));
   }, []);
@@ -78,63 +88,65 @@ function MainPage() {
         </div>
 
         {posiciones.map(pos => (
-  <React.Fragment key={pos}>
-    <h2 id={pos.toLowerCase()} className="titulo-position">{pos.toUpperCase()}S</h2>
-    {players
-      .filter(player => player.position_2 === pos)
-      .map((player, index) => (
-        <Link to={`/biografia/${player.id}`} style={{ textDecoration: 'none' }} key={player.id}>
-          <div className={`carta-jugador ${index % 2 === 0 ? 'even' : 'odd'}`}>
-            <img
-              src={player.photo_url}
-              alt={player.name}
-              className="foto-jugador"
-              onError={e => e.target.src = '/photos/placeholder.png'}
-            />
-            <div className="nombre-jugador">{player.name}</div>
-            <div className="dorsal">{player.number}</div>
-            <div className="overlay-datos">
-              <div className="dato-jugador">
-                <b className="titulo-dato">Posición</b>
-                <span className="valor-dato">{player.position}</span>
-              </div>
-              <div className="dato-jugador">
-                <b className="titulo-dato">Nacionalidad</b>
-                <span className="valor-dato">{player.nationality}</span>
-              </div>
-            </div>
-          </div>
-        </Link>
-      ))}
-  </React.Fragment>
-))}
+          <React.Fragment key={pos}>
+            <h2 id={pos.toLowerCase()} className="titulo-position">{pos.toUpperCase()}S</h2>
+            {playersByPosition[pos].map((player, index) => (
+              <Link to={`/biografia/${player.id}`} style={{ textDecoration: 'none' }} key={player.id}>
+                <div className={`carta-jugador ${index % 2 === 0 ? 'even' : 'odd'}`}>
+                  <img
+                    src={player.photo_url}
+                    alt={player.name}
+                    className="foto-jugador"
+                    loading="lazy"
+                    decoding="async"
+                    onError={e => e.target.src = '/photos/placeholder.png'}
+                  />
+                  <div className="nombre-jugador">{player.name}</div>
+                  <div className="dorsal">{player.number}</div>
+                  <div className="overlay-datos">
+                    <div className="dato-jugador">
+                      <b className="titulo-dato">Posición</b>
+                      <span className="valor-dato">{player.position}</span>
+                    </div>
+                    <div className="dato-jugador">
+                      <b className="titulo-dato">Nacionalidad</b>
+                      <span className="valor-dato">{player.nationality}</span>
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </React.Fragment>
+        ))}
 
-<h2 id="director tecnico" className="titulo-position">DIRECTOR TÉCNICO</h2>
-{players
-  .filter(player => player.position_2 === 'DIRECTOR TECNICO')
-  .map(player => (
-    <Link to={`/biografia/${player.id}`} style={{ textDecoration: 'none' }} key={player.id}>
-      <div className="carta-jugador tecnico">
-        <img
-          src={player.photo_url}
-          alt={player.name}
-          className="foto-jugador"
-          onError={e => e.target.src = '/photos/placeholder.png'}
-        />
-        <div className="nombre-jugador">{player.name}</div>
-        <div className="overlay-datos">
-          <div className="dato-jugador">
-            <b className="titulo-dato">POSICIÓN</b>
-            <span className="valor-dato">DT</span>
-          </div>
-          <div className="dato-jugador">
-            <b className="titulo-dato">Nacionalidad</b>
-            <span className="valor-dato">{player.nationality}</span>
-          </div>
-        </div>
-      </div>
-    </Link>
-))}
+        <>
+          <h2 id="director tecnico" className="titulo-position">DIRECTOR TÉCNICO</h2>
+          {playersByPosition['DIRECTOR TECNICO'].map(player => (
+            <Link to={`/biografia/${player.id}`} style={{ textDecoration: 'none' }} key={player.id}>
+              <div className="carta-jugador tecnico">
+                <img
+                  src={player.photo_url}
+                  alt={player.name}
+                  className="foto-jugador"
+                  loading="lazy"
+                  decoding="async"
+                  onError={e => e.target.src = '/photos/placeholder.png'}
+                />
+                <div className="nombre-jugador">{player.name}</div>
+                <div className="overlay-datos">
+                  <div className="dato-jugador">
+                    <b className="titulo-dato">POSICIÓN</b>
+                    <span className="valor-dato">DT</span>
+                  </div>
+                  <div className="dato-jugador">
+                    <b className="titulo-dato">Nacionalidad</b>
+                    <span className="valor-dato">{player.nationality}</span>
+                  </div>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </>
       </div>
 
       <section className="sponsors-section">
